@@ -153,7 +153,13 @@ app.post('/api/scan-badge', (req, res) => {
   const type = (lastPresence && lastPresence.type === 'entrer') ? 'sortie' : 'entrer';
   
   // Insertion avec l'heure locale du serveur
-  const localTime = new Date().toISOString().replace('T', ' ').substring(0, 19);
+  const now = new Date();
+  const localTime = now.getFullYear() + '-' + 
+    String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+    String(now.getDate()).padStart(2, '0') + ' ' + 
+    String(now.getHours()).padStart(2, '0') + ':' + 
+    String(now.getMinutes()).padStart(2, '0') + ':' + 
+    String(now.getSeconds()).padStart(2, '0');
   db.prepare('INSERT INTO presence (employee_id, type, scanned_at) VALUES (?, ?, ?)').run(employe.id, type, localTime);
   
   notificationEmitter.emit('pointage', {
@@ -420,7 +426,13 @@ app.post('/employe-pointage', (req, res) => {
   
   const type = (lastPresence && lastPresence.type === 'entrer') ? 'sortie' : 'entrer';
   
-  const localTime = new Date().toISOString().replace('T', ' ').substring(0, 19);
+  const now2 = new Date();
+  const localTime = now2.getFullYear() + '-' + 
+    String(now2.getMonth() + 1).padStart(2, '0') + '-' + 
+    String(now2.getDate()).padStart(2, '0') + ' ' + 
+    String(now2.getHours()).padStart(2, '0') + ':' + 
+    String(now2.getMinutes()).padStart(2, '0') + ':' + 
+    String(now2.getSeconds()).padStart(2, '0');
   db.prepare('INSERT INTO presence (employee_id, type, scanned_at) VALUES (?, ?, ?)').run(employe.id, type, localTime);
   
   notificationEmitter.emit('pointage', {
@@ -901,7 +913,13 @@ app.post('/api/presence', (req, res) => {
     SELECT type FROM presence WHERE employee_id = ? ORDER BY scanned_at DESC LIMIT 1
   `).get(employee.id);
   const nextType = (!last || last.type === 'sortie') ? 'entrer' : 'sortie';
-  const localTime = new Date().toISOString().replace('T', ' ').substring(0, 19);
+  const now3 = new Date();
+  const localTime = now3.getFullYear() + '-' + 
+    String(now3.getMonth() + 1).padStart(2, '0') + '-' + 
+    String(now3.getDate()).padStart(2, '0') + ' ' + 
+    String(now3.getHours()).padStart(2, '0') + ':' + 
+    String(now3.getMinutes()).padStart(2, '0') + ':' + 
+    String(now3.getSeconds()).padStart(2, '0');
   db.prepare('INSERT INTO presence (employee_id, type, scanned_at) VALUES (?, ?, ?)').run(employee.id, nextType, localTime);
   
   notificationEmitter.emit('pointage', {
